@@ -53,7 +53,6 @@ def set_console_title(title: str):
 set_console_title("fusi and wish made this haha, t.me/larpforfree for more.")
 
 
-
 def unicode_supported() -> bool:
     enc = (sys.stdout.encoding or "").lower()
     return "utf" in enc
@@ -250,16 +249,25 @@ class AccountStore:
 
     @classmethod
     def add_account(cls, username, uuid):
+        cls.data.setdefault("accounts", {})
         cls.data["accounts"][uuid] = {
-            "username": username,
             "accessToken": uuid,
-            "localId": uuid,
-            "remoteId": uuid,
-            "minecraftProfile": {"id": uuid, "name": username},
-            "type": "Xbox",
-            "persistent": True,
+            "accessTokenExpiresAt": "2050-07-02T10:56:30.717167800Z",
+            "eligibleForMigration": False,
+            "hasMultipleProfiles": False,
             "legacy": True,
+            "persistent": True,
+            "userProperites": [],
+            "localId": uuid,
+            "minecraftProfile": {
+                "id": uuid,
+                "name": username
+            },
+            "remoteId": uuid,
+            "type": "Xbox",
+            "username": username
         }
+        cls.data["activeAccountLocalId"] = uuid
         log(MESSAGES["account_created"], "SUCCESS", PASTEL_PINK)
 
     @classmethod
